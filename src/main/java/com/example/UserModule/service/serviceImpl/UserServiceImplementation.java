@@ -114,26 +114,6 @@ public class UserServiceImplementation implements UserService {
   }
 
 
-  private boolean USNValidAndWithinActiveYear(String usn) {
-    // Define the regular expression pattern for USN format
-    final String USN_PATTERN = "^\\d{1}[A-Z]{2}\\d{2}[A-Z]{2}\\d{3}$";
-    // Check if the USN format matches the pattern
-    if (!Pattern.matches(USN_PATTERN, usn)) {
-      return false;
-    }
-    // Extract the year portion from the USN (e.g., "19" from "1NH19IS009")
-    int year = Integer.parseInt(usn.substring(3, 5));
-    // Get the current year
-    int currentYear = Year.now().getValue();
-    // Calculate the active year range
-    int activeYearStart = currentYear - 4;
-    int activeYearEnd = currentYear;
-    // Check if the year falls within the active range
-    boolean isWithinActiveYearRange = year >= (activeYearStart % 100) && year <= (activeYearEnd % 100);
-    return isWithinActiveYearRange;
-  }
-
-
   private static boolean isValidPassword(String password) {
 
     // Regex to check valid password.
@@ -200,7 +180,6 @@ public class UserServiceImplementation implements UserService {
     }
     updateFirstLoginTime(user.getId(), new Date());
     userInsightsRepository.updateLocationAndDeviceInformation(user.getId(), geoIP.getFullLocation(), geoIP.getDevice());
-    userInsightsRepository.updateLiveUserFlag(user.getId(), USNValidAndWithinActiveYear(user.getUsn()));
     return new SignInResponseDto(Constants.SUCCESS, token.getToken());
   }
 

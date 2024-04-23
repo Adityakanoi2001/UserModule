@@ -28,9 +28,6 @@ public class UserTable {
   @Column(name = "email")
   private String email;
 
-  @Column(name = "usn")
-  private String usn;
-
   @Column(name = "password")
   private String password;
 
@@ -43,7 +40,7 @@ public class UserTable {
   @Column(name = "state")
   private String state;
 
-  public UserTable(String firstName, String lastName, String email, String usn, String encryptedPassword, String city,
+  public UserTable(String firstName, String lastName, String email, String encryptedPassword, String city,
       String state, String phoneNumber) {
     if (!isValidPhoneNumber(phoneNumber)) {
       throw new IllegalArgumentException("Invalid phone number");
@@ -51,7 +48,6 @@ public class UserTable {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
-    this.usn = usn;
     this.password = encryptedPassword;
     this.city = city;
     this.state = state;

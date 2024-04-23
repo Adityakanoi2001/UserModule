@@ -13,5 +13,5 @@
  \   \ .'   `--`----'      `--'---'   ---`-'           '---'             \   \ .'           '---'      '---'        \   \  /  \   \  /   ---`-'
   `---`                                                                   `---`                                      `----'    `----'
 
-Developer and R&D By Aditya Sunit Kanoi , Banglore , Hindustan
+Developer and R&D By Aditya Sunit Kanoi , Banglore , India
 Powered by Spring Boot ${spring-boot.version}

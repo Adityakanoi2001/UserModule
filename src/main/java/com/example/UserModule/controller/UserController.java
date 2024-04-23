@@ -1,6 +1,5 @@
 package com.example.UserModule.controller;
 
-
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +30,7 @@ public class UserController {
   @Operation(description = "API ENDPOINT FOR SIGN-UP")
   @PostMapping(UserModuleApiPath.SIGN_UP)
   public ResponseEntity<SignUpResponseDto> Signup(@RequestBody SignupDto signupDto) throws CustomException {
-    log.warn("Invoking API for Sign-Up with UserName : {} and UserEmail : {}", signupDto.getFirstName(),
+    log.info("Invoking API for Sign-Up with UserName : {} and UserEmail : {}", signupDto.getFirstName(),
         signupDto.getEmail());
     return new ResponseEntity(userService.signUp(signupDto), HttpStatus.OK);
   }
@@ -41,7 +40,7 @@ public class UserController {
   public ResponseEntity<SignInResponseDto> SignIn(@RequestBody SignInDto signInDto,
       @RequestParam(required = false) String ip, HttpServletRequest request)
       throws CustomException, AuthenticationFailException {
-    log.warn("Invoking API for Sign-In with UserEmail : {}", signInDto.getEmail());
+    log.info("Invoking API for Sign-In with UserEmail : {}", signInDto.getEmail());
     return new ResponseEntity<>(userService.signIn(signInDto, ip, request), HttpStatus.OK);
   }
 
@@ -49,7 +48,7 @@ public class UserController {
   @PostMapping(UserModuleApiPath.RESET_PASSWORD_LINK)
   public ResponseEntity<PasswordResetLinkDto> PasswordResetLink(@RequestParam String email)
       throws CustomException, AuthenticationFailException {
-    log.warn("Invoking API for Password Reset Link with UserEmail : {}", email);
+    log.info("Invoking API for Password Reset Link with UserEmail : {}", email);
     return new ResponseEntity<>(userService.passwordResetLinkFunction(email), HttpStatus.OK);
   }
 
@@ -57,7 +56,7 @@ public class UserController {
   @PutMapping(UserModuleApiPath.UPDATE_PASSWORD)
   public ResponseEntity<PasswordChangeResponseDto> PasswordChange(@RequestBody PasswordChangeDto passwordChangeDto,
       HttpServletRequest request) {
-    log.warn("Invoking API for Change of Password at Time : {}", new Date());
+    log.info("Invoking API for Change of Password at Time : {}", new Date());
     PasswordChangeResponseDto passwordChangeResponseDto = userService.passwordChangeFunction(passwordChangeDto);
     return new ResponseEntity<>(passwordChangeResponseDto, HttpStatus.OK);
   }
@@ -65,7 +64,7 @@ public class UserController {
   @Operation(description = "API ENDPOINT FOR DELETION OF ACCOUNT")
   @DeleteMapping(UserModuleApiPath.DELETE_USER_ACCOUNT)
   public ResponseEntity<AccountDeletionResponseDto> AccountDeletion(@RequestParam String authenticationToken) {
-    log.warn("Invoking API for Deletion of User Account at Time : {}", new Date());
+    log.info("Invoking API for Deletion of User Account at Time : {}", new Date());
     AccountDeletionResponseDto accountDeletionResponseDto = userService.accountDeletionFunction(authenticationToken);
     return new ResponseEntity<>(accountDeletionResponseDto, HttpStatus.OK);
   }
@@ -74,7 +73,7 @@ public class UserController {
   @PutMapping(UserModuleApiPath.DEACTIVATE_USER_ACCOUNT)
   public ResponseEntity<AccountDeactivationResponseDto> AccountDeactivation(@RequestParam String authenticationToken,
       String action) {
-    log.warn("Invoking API for Deactivation of User Account at Time : {}", new Date());
+    log.info("Invoking API for Deactivation of User Account at Time : {}", new Date());
     AccountDeactivationResponseDto accountDeactivationResponseDto =
         userService.accountActivationDeactivationFunction(authenticationToken, action);
     return new ResponseEntity<>(accountDeactivationResponseDto, HttpStatus.OK);
