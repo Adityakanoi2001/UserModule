@@ -18,15 +18,16 @@ import com.maxmind.geoip2.exception.GeoIp2Exception;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.Year;
 import java.util.Date;
 
+import org.apache.tomcat.util.buf.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
@@ -35,18 +36,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 
+@Lazy
 @Slf4j
 @Service
 public class UserServiceImplementation implements UserService {
@@ -170,16 +170,18 @@ public class UserServiceImplementation implements UserService {
     });
     executorService.shutdown();
 
-
-    try {
-      geoIP = geoIPLocationService.getIpLocation(ip, request);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    } catch (GeoIp2Exception e) {
-      throw new RuntimeException(e);
+    if(Objects.nonNull(ip))
+    {
+      try {
+        geoIP = geoIPLocationService.getIpLocation(ip, request);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      } catch (GeoIp2Exception e) {
+        throw new RuntimeException(e);
+      }
+      updateFirstLoginTime(user.getId(), new Date());
+      userInsightsRepository.updateLocationAndDeviceInformation(user.getId(), geoIP.getFullLocation(), geoIP.getDevice());
     }
-    updateFirstLoginTime(user.getId(), new Date());
-    userInsightsRepository.updateLocationAndDeviceInformation(user.getId(), geoIP.getFullLocation(), geoIP.getDevice());
     return new SignInResponseDto(Constants.SUCCESS, token.getToken());
   }
 
